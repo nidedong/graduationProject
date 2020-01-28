@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-
+import Login from "./pages/User/login";
 class App extends Component {
   render() {
-    return <div className="App">你好</div>;
+    return <Login></Login>;
   }
 }
 
