@@ -1,8 +1,17 @@
 import React, { Component } from "react";
-import Login from "./pages/User/login";
+import HomePage from "./pages/User/HomePage/homePage";
+
+import { Button } from "antd";
 class App extends Component {
   render() {
-    return <Login></Login>;
+    return (
+      <div style={{ height: "100%" }}>
+        <HomePage></HomePage>
+        {/* <Button loading classNmae="primary">
+          登陆
+        </Button> */}
+      </div>
+    );
   }
 }
 
