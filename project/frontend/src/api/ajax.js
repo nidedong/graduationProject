@@ -1,5 +1,5 @@
 import axios from "axios";
-
+const baseUrl = "http://localhost:9999";
 export default function ajax(url = "", params = {}, type = "GET") {
   let promise;
   // 1. 返回promise对象
@@ -18,9 +18,9 @@ export default function ajax(url = "", params = {}, type = "GET") {
       // 1.4 拼接完整的路径
       url += "?" + paramsStr;
       // 1.5 发起get请求
-      promise = axios.get(url);
+      promise = axios.get(baseUrl + url);
     } else if ("POST" === type.toUpperCase()) {
-      promise = axios.post(url, params);
+      promise = axios.post(baseUrl + url, params);
     }
     // 1.6 返回结果
     promise

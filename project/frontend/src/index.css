@@ -10,3 +10,11 @@ body {
 }
 
 @import "~antd/dist/antd.css";
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
