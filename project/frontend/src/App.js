@@ -1,16 +1,27 @@
 import React, { Component } from "react";
-import HomePage from "./pages/User/HomePage/homePage";
 
+// import Main from "@/pages/Main/Main";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import routes from "@/routes/router";
+console.log(routes);
 import { Button } from "antd";
 class App extends Component {
   render() {
     return (
-      <div style={{ height: "100%" }}>
-        <HomePage></HomePage>
-        {/* <Button loading classNmae="primary">
-          登陆
-        </Button> */}
-      </div>
+      <BrowserRouter>
+        <Switch>
+          {routes.map((item, index) => (
+            <Route
+              path={item.path}
+              render={() => (
+                <item.component routes={item.children}></item.component>
+              )}
+              exact={item.exact}
+              key={index}
+            ></Route>
+          ))}
+        </Switch>
+      </BrowserRouter>
     );
   }
 }

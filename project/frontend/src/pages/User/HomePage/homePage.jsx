@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./homePage.css";
 import { Icon, Form, Input, Button } from "antd";
+import { Link } from "react-router-dom";
 // import { connect } from "react-redux";
 import { loginApi } from "../../../api/user";
 class HomePage extends Component {
@@ -9,26 +10,17 @@ class HomePage extends Component {
     this.state = {
       username: "",
       password: "",
-      errMessage: "",
+      errMessage: [],
       isSubmit: false
     };
   }
   componentDidMount() {
-    // this.props.form.validateFields();
+    console.log(this.props);
   }
 
   render() {
-    const {
-      getFieldDecorator,
-      getFieldsError,
-      getFieldError,
-      isFieldTouched
-    } = this.props.form;
-    const usernameError =
-      (isFieldTouched("username") && getFieldError("username")) ||
-      this.state.errMessage;
-    const passwordError =
-      isFieldTouched("password") && getFieldError("password");
+    const { getFieldDecorator } = this.props.form;
+    const { errMessage } = this.state;
     return (
       <div className="wrapper">
         <div className="main">
@@ -57,16 +49,13 @@ class HomePage extends Component {
             <div className="quicklyLogin">
               <Form layout="inline" onSubmit={this.handelSubmit.bind(this)}>
                 <Form.Item
-                  validateStatus={usernameError ? "error" : ""}
-                  help={this.state.errMessage}
+                  validateStatus={errMessage[0] ? "error" : ""}
+                  help={errMessage[0] || ""}
                 >
-                  {getFieldDecorator("username", {
-                    rules: [
-                      { required: true, message: "用户名不能为空!" },
-                      { min: 3, message: "用户名最少为3位" },
-                      { max: 6, message: "用户名最多为6位" }
-                    ]
-                  })(
+                  {getFieldDecorator(
+                    "username",
+                    {}
+                  )(
                     <Input
                       prefix={
                         <Icon
@@ -79,16 +68,13 @@ class HomePage extends Component {
                   )}
                 </Form.Item>
                 <Form.Item
-                  validateStatus={passwordError ? "error" : ""}
-                  help={passwordError || ""}
+                  validateStatus={errMessage[1] ? "error" : ""}
+                  help={errMessage[1] || ""}
                 >
-                  {getFieldDecorator("password", {
-                    rules: [
-                      { required: true, message: "密码不能为空!" },
-                      { min: 3, message: "密码最少为3位" },
-                      { max: 6, message: "密码最多为6位" }
-                    ]
-                  })(
+                  {getFieldDecorator(
+                    "password",
+                    {}
+                  )(
                     <Input
                       prefix={
                         <Icon
@@ -105,8 +91,6 @@ class HomePage extends Component {
                   <Button
                     type="primary"
                     htmlType="submit"
-                    // disabled={hasErrors(getFieldsError())}
-                    disabled={this.hasErrors(getFieldsError())}
                     className="raduis_20"
                     loading={this.state.isSubmit}
                   >
@@ -123,10 +107,14 @@ class HomePage extends Component {
               ></Icon>
               <span className="title">查看世界上正在发生什么</span>
               <span className="font_bold">立即加入watcher。</span>
-              <Button type="primary" size="large" className="raduis_20">
-                注册
-              </Button>
-              <Button className="raduis_20">登陆</Button>
+              <Link to="/register">
+                <Button type="primary" size="large" className="raduis_20">
+                  注册
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button className="raduis_20">登陆</Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -140,17 +128,28 @@ class HomePage extends Component {
     );
   }
 
-  //登录按钮能否点击
-  hasErrors(fieldsError) {
-    return Object.keys(fieldsError).some(field => fieldsError[field]);
-  }
-
   async handelSubmit(e) {
     e.preventDefault();
+    let value = this.props.form.getFieldsValue();
+    //验证
+    let errMessage = [];
+    if (!value.username) errMessage[0] = "用户名不能为空";
+    if (!value.password) errMessage[1] = "密码不能为空";
+    if (value.username && value.username.length < 3)
+      errMessage[0] = "用户名不能小于三位";
+    if (value.password && value.password.length < 3)
+      errMessage[1] = "用户名不能小于三位";
+    if (value.username && value.username.length > 10)
+      errMessage[0] = "用户名不能大于十位";
+    if (value.password && value.password.length > 10)
+      errMessage[1] = "密码不能大于十位";
+    if (errMessage.length > 0)
+      return this.setState({
+        errMessage
+      });
     this.setState({
       isSubmit: true
     });
-    let value = this.props.form.getFieldsValue();
     let res = await loginApi(value);
     if (res.status === 100) {
       console.log("登陆成功");
