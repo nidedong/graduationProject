@@ -11,6 +11,11 @@ body {
 
 @import "~antd/dist/antd.css";
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .absolute {
   position: absolute;
 }

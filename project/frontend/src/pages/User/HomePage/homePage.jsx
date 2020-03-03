@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./homePage.css";
 import { Icon, Form, Input, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 // import { connect } from "react-redux";
 import { loginApi } from "../../../api/user";
 class HomePage extends Component {
@@ -152,7 +152,10 @@ class HomePage extends Component {
     });
     let res = await loginApi(value);
     if (res.status === 100) {
-      console.log("登陆成功");
+      setTimeout(() => {
+        localStorage.setItem("token", res.token);
+        this.props.history.push("/main");
+      }, 1000);
     } else {
       this.setState({
         errMessage: res.message,
@@ -163,4 +166,4 @@ class HomePage extends Component {
 }
 
 const WrappedHomePage = Form.create({})(HomePage);
-export default WrappedHomePage;
+export default withRouter(WrappedHomePage);

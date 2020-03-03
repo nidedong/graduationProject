@@ -2,10 +2,19 @@ import React, { Component } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 class MainLayout extends Component {
   render() {
+    const token = localStorage.getItem("token");
+    console.log(token);
     const { routes } = this.props;
+    const cpnRed = !token ? (
+      <Route path="/main">
+        <Redirect to="/"></Redirect>
+      </Route>
+    ) : (
+      ""
+    );
     return (
       <Switch>
-        {/* <Redirect from="/" to="/home" exact></Redirect> */}
+        {cpnRed}
         {routes.map((item, index) => (
           <Route
             path={item.path}

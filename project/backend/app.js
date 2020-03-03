@@ -9,6 +9,8 @@ var query = require("./db/sqlFn");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var connection = mysql.createConnection(sqlConfig.mysql);
+var md5 = require("md5");
+
 //链接数据库
 connection.connect(function(err) {
   if (err) return console.log("数据库连接失败!!!", err);
@@ -17,9 +19,10 @@ connection.connect(function(err) {
 
 global.con = connection;
 global.query = query;
+global.md5 = md5;
 var app = express();
 app.all("*", function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild"
