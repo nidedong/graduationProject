@@ -1,0 +1,55 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-color: #262e36;
+  position: relative;
+}
+
+.wrapper .box {
+  width: 36%;
+  background-color: #15202b;
+  border-radius: 20px;
+  height: 80%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px 37px;
+  box-sizing: border-box;
+}
+
+.box .header-stepOne,
+.box .header-stepTwo {
+  display: flex;
+  margin-bottom: 37px;
+}
+
+.box>strong {
+  line-height: 28px;
+  font-size: 28px;
+  color: #fff;
+}
+
+.box .header-stepOne i {
+  flex: 1;
+}
+
+.box .btnWrapper {
+  width: 80px;
+  height: 37px;
+  position: absolute;
+  right: 37px;
+}
+
+.box .ant-form-item {
+  margin-top: 25px;
+}
+
+.box .ant-form-item label {
+  color: #fff;
+}
+
+.stepOne .tip {
+  font-size: 12px;
+  color: #b7b1a7;
+}

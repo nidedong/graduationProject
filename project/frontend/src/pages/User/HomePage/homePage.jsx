@@ -2,21 +2,17 @@ import React, { Component } from "react";
 import "./homePage.css";
 import { Icon, Form, Input, Button } from "antd";
 import { Link, withRouter } from "react-router-dom";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import { loginApi } from "../../../api/user";
 class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
       errMessage: [],
       isSubmit: false
     };
   }
-  componentDidMount() {
-    console.log(this.props);
-  }
+  componentDidMount() {}
 
   render() {
     const { getFieldDecorator } = this.props.form;

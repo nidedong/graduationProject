@@ -18,10 +18,8 @@
 }
 
 .loginWrapper form {
-  width: 50%;
+  width: 30%;
   margin: 0 auto;
-  transform: translateX(-15%);
-
 }
 
 .loginWrapper form label {
