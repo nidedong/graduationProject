@@ -1,0 +1,33 @@
+html {
+  background-color: #181a1b !important;
+  font-size: 15px;
+  color: #fff;
+}
+
+.overallLayout {
+  display: flex;
+  background-color: #15202b;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.overallLayout .middle {
+  width: 750px;
+  height: 1500px;
+  border-left: 1px solid #4e5f6b;
+  border-right: 1px solid #4e5f6b;
+}
+
+.overallLayout .left {
+  flex: 1;
+  /* height: 200px; */
+  min-width: 75px;
+}
+
+.overallLayout .right {
+  flex: 1;
+  height: 200px;
+  position: relative;
+
+}

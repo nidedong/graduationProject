@@ -9,7 +9,7 @@ class HomePage extends Component {
     super(props);
     this.state = {
       errMessage: [],
-      isSubmit: false
+      isSubmit: false,
     };
   }
   componentDidMount() {}
@@ -141,21 +141,22 @@ class HomePage extends Component {
       errMessage[1] = "密码不能大于十位";
     if (errMessage.length > 0)
       return this.setState({
-        errMessage
+        errMessage,
       });
     this.setState({
-      isSubmit: true
+      isSubmit: true,
     });
     let res = await loginApi(value);
     if (res.status === 100) {
       setTimeout(() => {
         localStorage.setItem("token", res.token);
+        localStorage.setItem("uid", res.data.uid);
         this.props.history.push("/main");
       }, 1000);
     } else {
       this.setState({
         errMessage: res.message,
-        isSubmit: false
+        isSubmit: false,
       });
     }
   }

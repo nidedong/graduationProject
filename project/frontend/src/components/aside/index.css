@@ -1,0 +1,36 @@
+.asWrapper {
+  width: 210px;
+  position: fixed;
+  padding-right: 30px;
+  padding-top: 15px;
+  margin-left: calc((100vw - 750px) / 2 - 210px);
+  box-sizing: border-box;
+  font-size: 19px;
+  font-weight: 600;
+  background-color: transparent;
+  left: 0;
+}
+
+.asWrapper .oneLink {
+  display: flex;
+  align-items: center;
+  padding: 21px 0;
+}
+
+.asWrapper .oneLink>span {
+  margin-left: 30px;
+}
+
+
+
+@media screen and (max-width: 1200px) {
+  .asWrapper.asWrapper-m {
+    width: 30px;
+    padding: 15px 15px 0;
+    margin-left: calc(100vw - 750px - 30px)
+  }
+
+  .asWrapper.asWrapper-m .oneLink span {
+    display: none;
+  }
+}

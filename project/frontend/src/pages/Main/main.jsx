@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+// import "./main.css";
 
 class Main extends Component {
   render() {
-    return <div>main页面</div>;
+    return <div>main123123</div>;
   }
 }
 

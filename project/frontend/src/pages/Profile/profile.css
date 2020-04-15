@@ -1,0 +1,74 @@
+.profileWrapper {}
+
+.profileWrapper .backgroundImg {
+  width: 100%;
+  height: 250px;
+  background-color: #374c5c;
+  position: relative;
+  box-sizing: content-box;
+}
+
+.profileWrapper .headerPicWrapper {
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+  border: 5px solid #44688c;
+  box-sizing: border-box;
+  position: absolute;
+  left: 15px;
+  bottom: -90px;
+  z-index: 100;
+}
+
+.profileWrapper .showInfo {
+  color: #9f9b94;
+  font-size: 16px;
+  padding-left: 18px;
+  box-sizing: border-box;
+}
+
+.profileWrapper .showInfo .nickName {
+  line-height: 30px;
+}
+
+.profileWrapper .showInfo .special {
+  color: #fff;
+  margin-right: 5px;
+}
+
+.pl5 {
+  padding-left: 5px;
+}
+
+.follow {
+  display: flex;
+}
+
+.follow .following {
+  margin-right: 25px;
+}
+
+.lh {
+  line-height: 30px;
+}
+
+.settingProfile {
+  height: 90px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.settingProfile button {
+  border: 1px solid #0b76b9;
+  background-color: rgba(0, 0, 0, .2);
+  padding: 8px;
+  font-size: 16px;
+  color: #0b76b9;
+  font-weight: bolder;
+  border-radius: 32px;
+  width: 15%;
+  line-height: 16px;
+
+}

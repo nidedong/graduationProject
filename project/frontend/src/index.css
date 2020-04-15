@@ -23,3 +23,7 @@ body {
 .relative {
   position: relative;
 }
+
+a {
+  color: #fff;
+}

@@ -211,6 +211,7 @@ class Register extends Component {
           setTimeout(() => {
             Modal.success({
               title: "账号注册成功",
+              okText: "确认",
               content: (
                 <div>
                   <h2>您的账号为: {registerApiRes.username}</h2>
