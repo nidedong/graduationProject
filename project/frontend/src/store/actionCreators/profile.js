@@ -10,3 +10,14 @@ export const fetchInitData = (uid) => {
     });
   };
 };
+
+export const putData = (uid, others) => {
+  return (dispatch) => {
+    api.putDataApi({ uid, ...others }).then((res) => {
+      dispatch({
+        type: actionType.PUT_DATA,
+        info: others,
+      });
+    });
+  };
+};

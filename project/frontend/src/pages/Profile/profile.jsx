@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./profile.css";
 import Header from "@/components/header/index";
-import { Icon, Button, Modal, Form, Input, Upload } from "antd";
+import { Icon, Button, Modal, Form, Input, Upload, message } from "antd";
 import { connect } from "react-redux";
 import * as actionCreator from "@/store/actionCreators/profile";
 class Profile extends Component {
@@ -9,37 +9,103 @@ class Profile extends Component {
     super(props);
     this.state = {
       visible: false,
+      loading_avatar: false,
+      loading_bgi: false,
     };
   }
   // 数据初始化
   componentDidMount() {
-    this.props.fetchInitData();
+    // this.props.fetchInitData();
   }
 
   toogleModalStatus() {
-    let visible = !this.state.visible;
+    let { setFieldsValue } = this.props.form;
+    let { profileInfo } = this.props;
+    setFieldsValue({
+      nickname: profileInfo.nickname,
+      birthday: profileInfo.birthday,
+      phone: profileInfo.phone,
+    });
     this.setState({
-      visible,
+      visible: true,
     });
   }
 
   handleOk = (e) => {
+    let { getFieldsValue } = this.props.form;
+    let fields = getFieldsValue(["nickname", "birthday", "phone"]);
+    let { headerImg, backgroundImg } = this.state;
+    let postParams = { headerImg, backgroundImg, ...fields };
+    !headerImg && delete postParams.headerImg;
+    !backgroundImg && delete postParams.backgroundImg;
+    postParams = Object.assign({}, this.props.profileInfo, postParams);
+    // 上传修改的信息
+    this.props.putData(postParams);
     this.setState({
       visible: false,
     });
   };
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
     });
+  };
+  // 限制用户上传文件格式、大小
+  beforeUpload(file) {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+  // 头像改变
+  handleChange_avatar = (info, e) => {
+    if (info.file.status === "uploading") {
+      this.setState({ loading_avatar: true });
+      return;
+    }
+    if (info.file.status === "done") {
+      this.getBase64(info.file.originFileObj, (imageUrl) => {
+        this.setState({
+          avatarUrl: imageUrl,
+          headerImg: info.file.response.data,
+          loading: false,
+        });
+      });
+    }
+  };
+  handleChange_bgi = (info, e) => {
+    if (info.file.status === "uploading") {
+      this.setState({ loading_bgi: true });
+      return;
+    }
+    if (info.file.status === "done") {
+      // Get this url from response in real world.
+      this.getBase64(info.file.originFileObj, (imageUrl) =>
+        this.setState({
+          bgiUrl: imageUrl,
+          backgroundImg: info.file.response.data,
+          loading: false,
+        })
+      );
+    }
   };
 
   render() {
     let profileInfo = this.props.profileInfo;
     let { getFieldDecorator } = this.props.form;
-    let { imageUrl } = this.state;
+    let { avatarUrl, bgiUrl } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 6 },
@@ -51,19 +117,26 @@ class Profile extends Component {
       },
     };
 
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
     return (
       <div class="profileWrapper">
         <Header content="我的"></Header>
         <div className="backgroundImg">
-          <img src="" alt="" />
+          <img
+            src={profileInfo.backgroundImg}
+            alt=""
+            style={{ height: "100%", width: "100%", objectFit: "cover" }}
+          />
           <div className="headerPicWrapper">
-            <img src="" alt="" />
+            <img
+              src={profileInfo.headerImg}
+              alt=""
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
           </div>
         </div>
 
@@ -73,7 +146,7 @@ class Profile extends Component {
         </div>
 
         <div className="showInfo">
-          <div className="nickName special">{profileInfo.nickName}</div>
+          <div className="nickName special">{profileInfo.nickname}</div>
           <div className="username pl5 lh">
             <Icon type="smile" style={{ "margin-right": "10px" }}></Icon>
             <span>{profileInfo.username}</span>
@@ -109,7 +182,7 @@ class Profile extends Component {
         >
           <Form {...formItemLayout}>
             <Form.Item label="昵称">
-              {getFieldDecorator("nickName", {
+              {getFieldDecorator("nickname", {
                 rules: [{ required: true, message: "请输入你的昵称!" }],
               })(<Input placeholder="昵称" />)}
             </Form.Item>
@@ -121,22 +194,29 @@ class Profile extends Component {
             <Form.Item label="生日">
               {getFieldDecorator("birthday", {
                 rules: [{ required: true, message: "请输入你的生日!" }],
-              })(<Input placeholder="生日" />)}
+              })(<Input placeholder="生日" type="date" />)}
             </Form.Item>
             <Form.Item label="背景图片">
               <Upload
-                name="avatar"
+                name="backgroundImg"
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                // beforeUpload={beforeUpload}
-                // onChange={this.handleChange}
+                action="http://localhost:9999/users/updateImg"
+                beforeUpload={this.beforeUpload}
+                onChange={this.handleChange_bgi}
               >
-                {imageUrl ? (
-                  <img src={imageUrl} alt="avatar" style={{ width: "100%" }} />
+                {bgiUrl ? (
+                  <img
+                    src={bgiUrl}
+                    alt="backgroundImg"
+                    style={{ width: "100%" }}
+                  />
                 ) : (
-                  uploadButton
+                  <div>
+                    <Icon type={this.state.loading_bgi ? "loading" : "plus"} />
+                    <div className="ant-upload-text">Upload</div>
+                  </div>
                 )}
               </Upload>
             </Form.Item>
@@ -146,14 +226,19 @@ class Profile extends Component {
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                // beforeUpload={beforeUpload}
-                // onChange={this.handleChange}
+                action="http://localhost:9999/users/updateImg"
+                beforeUpload={this.beforeUpload}
+                onChange={this.handleChange_avatar}
               >
-                {imageUrl ? (
-                  <img src={imageUrl} alt="avatar" style={{ width: "100%" }} />
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="avatar" style={{ width: "100%" }} />
                 ) : (
-                  uploadButton
+                  <div>
+                    <Icon
+                      type={this.state.loading_avatar ? "loading" : "plus"}
+                    />
+                    <div className="ant-upload-text">Upload</div>
+                  </div>
                 )}
               </Upload>
             </Form.Item>
@@ -175,6 +260,11 @@ const mapDispatchToProps = (dispatch) => {
     fetchInitData() {
       let uid = localStorage.getItem("uid");
       dispatch(actionCreator.fetchInitData(uid));
+    },
+
+    putData(params) {
+      let uid = localStorage.getItem("uid");
+      dispatch(actionCreator.putData(uid, params));
     },
   };
 };

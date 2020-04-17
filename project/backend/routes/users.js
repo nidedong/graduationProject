@@ -1,6 +1,9 @@
 var express = require("express");
 var router = express.Router();
 const commonKey = "1999522";
+var formidable = require("formidable");
+const path = require("path");
+const fs = require("fs");
 
 /* GET users listing. */
 //登陆接口
@@ -47,8 +50,61 @@ router.get("/getProfile", async (req, res) => {
   res.send({ status: 200, message: "获取成功", data: profileRes[0] });
 });
 
+// 修改profile信息
 router.post("/setProfile", async (req, res) => {
+  let { uid, backgroundImg, headerImg, nickname, birthday, phone } = req.body;
+  let queryRes = await query(
+    `update profile set backgroundImg='${backgroundImg}', headerImg='${headerImg}', nickname='${nickname}', birthday='${birthday}', phone='${phone}' where uid='${uid}'`
+  );
   res.send({ status: 200, message: "修改成功" });
+});
+
+// 获取上传图片处理
+router.post("/updateImg", async (req, res) => {
+  var form = new formidable.IncomingForm();
+  form.encoding = "utf-8";
+  form.uploadDir = path.join(__dirname + "/../public/upload");
+  form.keepExtensions = true; //保留后缀
+  form.maxFieldsSize = 2 * 1024 * 1024;
+  //处理图片
+  form.parse(req, function (err, fields, files) {
+    console.log(Object.keys(files)[0]);
+    console.log(files[Object.keys(files)[0]], "...........");
+    var fileKey = Object.keys(files)[0];
+    var filename = files[fileKey].name;
+    var nameArray = filename.split(".");
+    var type = nameArray[nameArray.length - 1];
+    var name = "";
+    for (var i = 0; i < nameArray.length - 1; i++) {
+      name = name + nameArray[i];
+    }
+    var date = new Date();
+    var time =
+      "_" +
+      date.getFullYear() +
+      "_" +
+      date.getMonth() +
+      "_" +
+      date.getDay() +
+      "_" +
+      date.getHours() +
+      "_" +
+      date.getMinutes();
+    var avatarName = name + time + "." + type;
+    var newPath = form.uploadDir + "/" + avatarName;
+    fs.renameSync(files[fileKey].path, newPath); //重命名
+
+    res.send({ data: "http://localhost:9999/upload/" + avatarName });
+  });
+});
+
+router.post("/tweet", async (req, res) => {
+  let { saySomething, photoList, uid } = req.body;
+  photoList = JSON.stringify(photoList);
+  let queryRes = await query(
+    `insert into main (saySomething, photoList, uid) values ('${saySomething}','${photoList}', '${uid}') `
+  );
+  res.send({ message: "上传成功" });
 });
 
 module.exports = router;

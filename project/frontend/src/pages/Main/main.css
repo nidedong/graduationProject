@@ -1,0 +1,43 @@
+.tweet {
+  padding: 10px 20px;
+  box-sizing: border-box;
+  width: 100%;
+
+  display: flex;
+}
+
+.bf-controlbar .control-item.button {
+  width: 36px !important;
+}
+
+.textarea {
+  width: 100%;
+  margin-left: 15px;
+  box-sizing: border-box;
+  background-color: #15202b;
+}
+
+.textarea textarea {
+  width: 100%;
+  background-color: #15202b;
+  border: 1px solid #4e5f6b;
+  resize: none;
+  height: 200px;
+  color: #b0aba2;
+  font-size: 20px;
+  padding: 20px;
+}
+
+.moreTools {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.welcome h1 {
+  border-top: 10px solid #253341;
+  color: #fff !important;
+}
+
+.mainWrapper {
+  text-align: center;
+}
