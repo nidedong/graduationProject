@@ -6,6 +6,7 @@ import * as mainType from "./actionsTypes/main";
 const defaultState = {
   ...userData,
   ...mainData,
+  loadingInfo: [],
 };
 
 export default (state = defaultState, action) => {
@@ -23,6 +24,9 @@ export default (state = defaultState, action) => {
       let mainData = JSON.parse(JSON.stringify(newState.tweetList));
       mainData.unshift(action.info);
       newState.mainData = mainData;
+      return newState;
+    case profileType.LOADING_PAGE_DATA:
+      newState.loadingInfo = action.loadingInfo;
       return newState;
     default:
       break;

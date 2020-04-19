@@ -1,0 +1,35 @@
+.loadingPageWrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+
+}
+
+.loadingWrapper {
+  position: absolute;
+  left: 50%;
+  top: 200px;
+  transform: translate(-50%, -50%);
+}
+
+.navTitle {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  border-bottom: #4e5f6b;
+  color: #b7b1a7;
+  text-align: center;
+}
+
+.navTitle .oneTitle {
+  flex: 1;
+  height: 55px;
+  border-bottom: 5px solid transparent;
+  line-height: 55px;
+  font-weight: bolder;
+}
+
+.navTitle .oneTitle.active {
+  border-bottom-color: #0b76b9;
+  color: #0b76b9;
+}

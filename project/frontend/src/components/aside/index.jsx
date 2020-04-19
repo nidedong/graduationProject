@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Icon } from "antd";
+import { Link, withRouter } from "react-router-dom";
+import { Icon, Button } from "antd";
 import "./index.css";
 
 class Aside extends Component {
@@ -8,8 +8,20 @@ class Aside extends Component {
     super(props);
     this.state = {
       activeIndex: 0,
+      isLoading: false,
     };
   }
+
+  // 退出功能
+  logout = () => {
+    this.setState({ isLoading: true }, () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("uid");
+      setTimeout(() => {
+        this.props.history.push("/");
+      }, 700);
+    });
+  };
 
   changeActiveIndex(activeIndex) {
     this.setState({
@@ -106,10 +118,18 @@ class Aside extends Component {
           </span>
         </Link>
 
-        <Link to="/main"></Link>
+        <Button
+          onClick={this.logout}
+          type="primary"
+          style={{ width: "50%" }}
+          loading={this.state.isLoading}
+          shape="round"
+        >
+          退出
+        </Button>
       </div>
     );
   }
 }
 
-export default Aside;
+export default withRouter(Aside);

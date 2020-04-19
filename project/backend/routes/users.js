@@ -43,6 +43,7 @@ router.post("/register", async function (req, res, next) {
     res.send({ status: 100, message: "注册成功", username });
 });
 
+// 获取profile信息
 router.get("/getProfile", async (req, res) => {
   let { uid } = req.query;
   // 查询
@@ -53,8 +54,19 @@ router.get("/getProfile", async (req, res) => {
 // 修改profile信息
 router.post("/setProfile", async (req, res) => {
   let { uid, backgroundImg, headerImg, nickname, birthday, phone } = req.body;
-  let queryRes = await query(
+  await query(
     `update profile set backgroundImg='${backgroundImg}', headerImg='${headerImg}', nickname='${nickname}', birthday='${birthday}', phone='${phone}' where uid='${uid}'`
+  );
+  let queryRes = await query(
+    `select photoList from profile where uid='${uid}'`
+  );
+  queryRes = queryRes[0].photoList ? JSON.parse(queryRes) : [];
+  backgroundImg && queryRes.push(backgroundImg);
+  headerImg && queryRes.push(headerImg);
+  await query(
+    `update profile set photoList='${JSON.stringify(
+      queryRes
+    )}' where uid='${uid}'`
   );
   res.send({ status: 200, message: "修改成功" });
 });
@@ -68,8 +80,6 @@ router.post("/updateImg", async (req, res) => {
   form.maxFieldsSize = 2 * 1024 * 1024;
   //处理图片
   form.parse(req, function (err, fields, files) {
-    console.log(Object.keys(files)[0]);
-    console.log(files[Object.keys(files)[0]], "...........");
     var fileKey = Object.keys(files)[0];
     var filename = files[fileKey].name;
     var nameArray = filename.split(".");
@@ -105,6 +115,33 @@ router.post("/tweet", async (req, res) => {
     `insert into main (saySomething, photoList, uid) values ('${saySomething}','${photoList}', '${uid}') `
   );
   res.send({ message: "上传成功" });
+});
+//获取我的博客
+router.get("/getMyTweets", async (req, res) => {
+  let { uid } = req.query;
+  let queryRes = await query(`select * from main where uid='${uid}'`);
+  console.log(queryRes);
+  res.send({ message: "获取成功", data: queryRes });
+});
+//获取我的博客
+router.get("/getMyPictures", async (req, res) => {
+  let { uid } = req.query;
+  let queryRes = await query(
+    `select photoList from profile where uid='${uid}'`
+  );
+  res.send({
+    message: "获取成功",
+    data: queryRes[0].photoList ? JSON.parse(queryRes[0].photoList) : [],
+  });
+});
+//获取我的喜欢
+router.get("/getMyLikes", async (req, res) => {
+  let { uid } = req.query;
+  let queryRes = await query(`select mylike from profile where uid='${uid}'`);
+  res.send({
+    message: "获取成功",
+    data: queryRes[0].like ? JSON.parse(queryRes[0].like) : [],
+  });
 });
 
 module.exports = router;

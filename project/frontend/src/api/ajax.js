@@ -8,7 +8,7 @@ export default function ajax(url = "", params = {}, type = "GET") {
     if ("GET" === type.toUpperCase()) {
       // 1.2 拼接字符串
       let paramsStr = "";
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         paramsStr += key + "=" + params[key] + "&";
       });
       // 1.3 过滤最后的&
@@ -24,10 +24,10 @@ export default function ajax(url = "", params = {}, type = "GET") {
     }
     // 1.6 返回结果
     promise
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });

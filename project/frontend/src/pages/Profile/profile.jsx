@@ -4,6 +4,7 @@ import Header from "@/components/header/index";
 import { Icon, Button, Modal, Form, Input, Upload, message } from "antd";
 import { connect } from "react-redux";
 import * as actionCreator from "@/store/actionCreators/profile";
+import LoadingPage from "@/components/loadingPage/index";
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,11 @@ class Profile extends Component {
       visible: false,
       loading_avatar: false,
       loading_bgi: false,
+      navTitle: [
+        { title: "我的博客", key: "fetchMyTweets", name: "myTweets" },
+        { title: "我的照片", key: "fetchMyPictures", name: "myPictures" },
+        { title: "我的喜欢", key: "fetchMyLikes", name: "myLikes" },
+      ],
     };
   }
   // 数据初始化
@@ -105,7 +111,7 @@ class Profile extends Component {
   render() {
     let profileInfo = this.props.profileInfo;
     let { getFieldDecorator } = this.props.form;
-    let { avatarUrl, bgiUrl } = this.state;
+    let { avatarUrl, bgiUrl, navTitle } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 6 },
@@ -118,7 +124,7 @@ class Profile extends Component {
     };
 
     return (
-      <div class="profileWrapper">
+      <div className="profileWrapper">
         <Header content="我的"></Header>
         <div className="backgroundImg">
           <img
@@ -168,7 +174,7 @@ class Profile extends Component {
             </div>
           </div>
         </div>
-
+        <LoadingPage navTitle={navTitle} cpnKey="profile"></LoadingPage>
         {/* 模态框 */}
         <Modal
           visible={this.state.visible}

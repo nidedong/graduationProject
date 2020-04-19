@@ -97,10 +97,10 @@ class Main extends Component {
         <div className="tweet">
           <Avatar
             src={profileInfo.headerImg}
+            shape="circle"
             style={{
               width: "60px",
               height: "60px",
-              borderRadius: "50%",
             }}
           ></Avatar>
           <div className="textarea">
@@ -164,6 +164,7 @@ class Main extends Component {
           style={{ width: "100px", marginBottom: "20px" }}
           loading={isSend}
           onClick={this.sendTweet}
+          shape="round"
         >
           发布
         </Button>

@@ -21,7 +21,7 @@ class MainLayout extends Component {
         </div>
         <div className="middle">
           <Switch>
-            {/* {cpnRed} */}
+            {cpnRed}
             {routes.map((item, index) => (
               <Route
                 path={item.path}
