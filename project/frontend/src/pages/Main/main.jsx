@@ -36,7 +36,16 @@ class Main extends Component {
         this.state.fileList.forEach((item) => {
           photoList.push(item.response.data);
         });
-        this.props.shareMyMood({ saySomething, photoList }, this.callback);
+        this.props.shareMyMood(
+          {
+            saySomething,
+            photoList,
+            headerImg: this.props.profileInfo.headerImg,
+            nickname: this.props.profileInfo.nickname,
+            time: new Date(),
+          },
+          this.callback
+        );
       }
     );
   };
@@ -185,11 +194,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchInitData() {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(actionCreator.fetchInitData(uid));
     },
     shareMyMood(payload, callback) {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(actionCreatorMain.shareMyMood(uid, payload, callback));
     },
   };

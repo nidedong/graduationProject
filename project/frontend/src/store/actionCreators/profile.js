@@ -33,6 +33,17 @@ export const fetchMyTweets = (uid, callback) => {
     });
   };
 };
+// 获取我的tweets
+export const fetchAllTweets = (uid, callback) => {
+  return (dispatch) => {
+    api.fetchAllTweetsApi({ uid }).then((res) => {
+      callback(res.data);
+      dispatch({
+        type: actionType.LOADING_PAGE_DATA,
+      });
+    });
+  };
+};
 // 获取我的照片
 export const fetchMyLikes = (uid, callback) => {
   return (dispatch) => {

@@ -149,8 +149,8 @@ class HomePage extends Component {
     let res = await loginApi(value);
     if (res.status === 100) {
       setTimeout(() => {
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("uid", res.data.uid);
+        sessionStorage.setItem("token", res.token);
+        sessionStorage.setItem("uid", res.data.uid);
         this.props.history.push("/main");
       }, 1000);
     } else {

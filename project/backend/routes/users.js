@@ -109,18 +109,42 @@ router.post("/updateImg", async (req, res) => {
 });
 
 router.post("/tweet", async (req, res) => {
-  let { saySomething, photoList, uid } = req.body;
+  let { saySomething, photoList, uid, headerImg, time, nickname } = req.body;
+  let length = photoList.length;
+  let count = await query(`select count(*) as count from main`);
+  if (length > 0) {
+    let queryRes = await query(
+      `select photoList from profile where uid='${uid}'`
+    );
+    let newPhotoList = (
+      (queryRes[0].photoList && JSON.parse(queryRes[0].photoList)) ||
+      []
+    ).concat(photoList);
+    await query(
+      `update profile set photoList='${JSON.stringify(
+        newPhotoList
+      )}' where uid='${uid}'`
+    );
+  }
   photoList = JSON.stringify(photoList);
-  let queryRes = await query(
-    `insert into main (saySomething, photoList, uid) values ('${saySomething}','${photoList}', '${uid}') `
+  await query(
+    `insert into main (saySomething, photoList, uid, headerImg, time, nickname, id) values ('${saySomething}','${photoList}', '${uid}', '${headerImg}','${time}','${nickname}', ${
+      count[0].count + 1
+    }) `
   );
   res.send({ message: "上传成功" });
 });
 //获取我的博客
 router.get("/getMyTweets", async (req, res) => {
   let { uid } = req.query;
-  let queryRes = await query(`select * from main where uid='${uid}'`);
-  console.log(queryRes);
+  let queryRes = await query(
+    `select * from main where uid='${uid}' order by time desc`
+  );
+  res.send({ message: "获取成功", data: queryRes });
+});
+//获取我的博客
+router.get("/getAllTweets", async (req, res) => {
+  let queryRes = await query(`select * from main order by time desc`);
   res.send({ message: "获取成功", data: queryRes });
 });
 //获取我的博客
@@ -138,9 +162,15 @@ router.get("/getMyPictures", async (req, res) => {
 router.get("/getMyLikes", async (req, res) => {
   let { uid } = req.query;
   let queryRes = await query(`select mylike from profile where uid='${uid}'`);
+  let mylike = queryRes[0].mylike ? JSON.parse(queryRes[0].mylike) : [];
+  console.log(mylike);
+  let mainRes = await query(
+    `select * from main where find_in_set(id, '${mylike.toString()}')`
+  );
+  console.log(mainRes);
   res.send({
     message: "获取成功",
-    data: queryRes[0].like ? JSON.parse(queryRes[0].like) : [],
+    data: mainRes,
   });
 });
 

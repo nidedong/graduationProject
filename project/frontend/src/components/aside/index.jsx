@@ -15,8 +15,8 @@ class Aside extends Component {
   // 退出功能
   logout = () => {
     this.setState({ isLoading: true }, () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("uid");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("uid");
       setTimeout(() => {
         this.props.history.push("/");
       }, 700);

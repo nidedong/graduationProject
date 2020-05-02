@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import "./index.css";
 import { Spin } from "antd";
 import { connect } from "react-redux";
+import Zmage from "react-zmage";
 import {
   fetchMyTweets,
   fetchMyLikes,
   fetchMyPictures,
+  fetchAllTweets,
 } from "@/store/actionCreators/profile";
+import Tweet from "@/components/Tweets/index";
 class LoadingPage extends Component {
   //props  navTitle:[]
   constructor(props) {
@@ -14,6 +17,7 @@ class LoadingPage extends Component {
     this.state = {
       activeIndex: 0,
       isLoading: false,
+      el: "",
     };
   }
 
@@ -22,8 +26,17 @@ class LoadingPage extends Component {
       case "profile":
         this.toggleActive("fetchMyTweets", 0, "myTweets");
         break;
+      case "explore":
+        this.toggleActive("fetchAllTweets", 0, "exploreData");
+        break;
     }
   }
+
+  setNewState = (key, newState) => {
+    this.setState({
+      [key]: newState,
+    });
+  };
   toggleActive(key, index, name) {
     this.setState(
       {
@@ -32,11 +45,25 @@ class LoadingPage extends Component {
       },
       () => {
         this.props[key]((data) => {
-          console.log(data, "loading");
           setTimeout(() => {
+            let el;
+            if (data.length === 0) {
+              el = (
+                <h2
+                  style={{
+                    color: "#fff",
+                    textAlign: "center",
+                    marginTop: "100px",
+                  }}
+                >
+                  暂无数据
+                </h2>
+              );
+            }
             this.setState({
               [name]: data,
               isLoading: false,
+              el,
             });
           }, 500);
         });
@@ -58,6 +85,45 @@ class LoadingPage extends Component {
             </a>
           ))}
         </div>
+
+        <div className="content">
+          {(this.state[this.props.navTitle[activeIndex].name] || []).length ===
+          0
+            ? this.state.el
+            : (activeIndex === 0 &&
+                (
+                  this.state[this.props.navTitle[activeIndex].name] || []
+                ).map((item) => (
+                  <Tweet
+                    info={item}
+                    setNewState={this.setNewState}
+                    name={this.props.navTitle[activeIndex].name}
+                    oldState={this.state[this.props.navTitle[activeIndex].name]}
+                  ></Tweet>
+                ))) ||
+              (activeIndex === 1 &&
+                (this.state[this.props.navTitle[activeIndex].name] || []).map(
+                  (item) => (
+                    <div className="imgWrapper">
+                      <Zmage
+                        src={item}
+                        style={{ width: "100%", height: "100%" }}
+                      ></Zmage>
+                    </div>
+                  )
+                )) ||
+              (activeIndex === 2 &&
+                (
+                  this.state[this.props.navTitle[activeIndex].name] || []
+                ).map((item) => (
+                  <Tweet
+                    info={item}
+                    setNewState={this.setNewState}
+                    name={this.props.navTitle[activeIndex].name}
+                    oldState={this.state[this.props.navTitle[activeIndex].name]}
+                  ></Tweet>
+                )))}
+        </div>
         <div className="loadingWrapper">
           <Spin spinning={isLoading}></Spin>
         </div>
@@ -76,16 +142,20 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // 我的
     fetchMyTweets(callback) {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(fetchMyTweets(uid, callback));
     },
     fetchMyPictures(callback) {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(fetchMyPictures(uid, callback));
     },
     fetchMyLikes(callback) {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(fetchMyLikes(uid, callback));
+    },
+    fetchAllTweets(callback) {
+      let uid = sessionStorage.getItem("uid");
+      dispatch(fetchAllTweets(uid, callback));
     },
   };
 };

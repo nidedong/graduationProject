@@ -27,3 +27,14 @@ body {
 a {
   color: #fff;
 }
+
+.main_font {
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.dsc_font {
+  color: #b7b1a7;
+  font-weight: bold;
+}

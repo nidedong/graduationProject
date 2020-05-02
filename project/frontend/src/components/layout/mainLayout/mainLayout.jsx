@@ -4,7 +4,7 @@ import "./mainLayout.css";
 import Aside from "@/components/aside/index";
 class MainLayout extends Component {
   render() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const { routes } = this.props;
     const cpnRed = !token ? (
       <Route path="/main">

@@ -1,0 +1,72 @@
+.tweets {
+  width: 100%;
+  padding: 10px 20px 0 90px;
+  box-sizing: border-box;
+  position: relative;
+  border-bottom: 1px solid #574949;
+}
+
+.tweets>img {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.tweets .dsc {
+  min-height: 64px;
+  width: 100%;
+  line-height: 26px;
+}
+
+.mg-r-10 {
+  margin-right: 10px;
+}
+
+.imageList {
+  height: 360px;
+  border-radius: 20px;
+  border: 1px solid #574949;
+  overflow: hidden;
+}
+
+.imgStyle-1 {
+  width: 100%;
+  height: 100;
+  object-fit: contain;
+}
+
+.imgStyle-2 {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imgStyle-3,
+.imgStyle-4 {
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+}
+
+.more {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 12px;
+
+}
+
+.more a {
+  display: flex;
+  align-items: center;
+}
+
+.more span {
+  margin-left: 15px;
+  color: #8e8c88;
+}

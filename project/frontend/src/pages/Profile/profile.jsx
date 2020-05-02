@@ -264,12 +264,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchInitData() {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(actionCreator.fetchInitData(uid));
     },
 
     putData(params) {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       dispatch(actionCreator.putData(uid, params));
     },
   };

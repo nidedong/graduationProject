@@ -119,8 +119,8 @@ class Login extends Component {
         localStorage.setItem("password", value.password);
       }
       setTimeout(() => {
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("uid", res.data.uid);
+        sessionStorage.setItem("token", res.token);
+        sessionStorage.setItem("uid", res.data.uid);
         this.props.history.push("/main");
       }, 1000);
     } else {
