@@ -4,6 +4,7 @@ import { Icon, Form, Input, Button } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginApi } from "../../../api/user";
+import * as actionCreators from "@/store/actionCreators/message";
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -152,6 +153,7 @@ class HomePage extends Component {
         sessionStorage.setItem("token", res.token);
         sessionStorage.setItem("uid", res.data.uid);
         this.props.history.push("/main");
+        this.props.connectWebsocket();
       }, 1000);
     } else {
       this.setState({
@@ -162,5 +164,18 @@ class HomePage extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    connectWebsocket() {
+      let uid = sessionStorage.getItem("uid");
+      let wsServer = new WebSocket("ws://localhost:9001");
+      wsServer.onopen = (e) => {
+        console.log("消息服务器连接成功！！！！！！！！！！");
+      };
+      dispatch(actionCreators.fetchMessageList(uid, wsServer));
+    },
+  };
+};
+
 const WrappedHomePage = Form.create({})(HomePage);
-export default withRouter(WrappedHomePage);
+export default connect(null, mapDispatchToProps)(withRouter(WrappedHomePage));

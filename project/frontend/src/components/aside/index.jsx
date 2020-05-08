@@ -85,7 +85,7 @@ class Aside extends Component {
             消息
           </span>
         </Link>
-        <Link
+        {/* <Link
           to="/main/addFriend"
           className="oneLink"
           onClick={this.changeActiveIndex.bind(this, 3)}
@@ -100,9 +100,9 @@ class Aside extends Component {
           <span style={{ color: activeIndex === 3 ? "#0a71b0" : "#fff" }}>
             交友
           </span>
-        </Link>
+        </Link> */}
         <Link
-          to="/main/profile"
+          to={`/main/profile/${sessionStorage.getItem("uid")}`}
           className="oneLink"
           onClick={this.changeActiveIndex.bind(this, 4)}
         >

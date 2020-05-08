@@ -18,6 +18,7 @@ class LoadingPage extends Component {
       activeIndex: 0,
       isLoading: false,
       el: "",
+      uid: this.props.uid ? this.props.uid : sessionStorage.getItem("uid"),
     };
   }
 
@@ -44,7 +45,7 @@ class LoadingPage extends Component {
         isLoading: true,
       },
       () => {
-        this.props[key]((data) => {
+        this.props[key](this.state.uid, (data) => {
           setTimeout(() => {
             let el;
             if (data.length === 0) {
@@ -141,20 +142,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     // 我的
-    fetchMyTweets(callback) {
-      let uid = sessionStorage.getItem("uid");
+    fetchMyTweets(uid, callback) {
       dispatch(fetchMyTweets(uid, callback));
     },
-    fetchMyPictures(callback) {
-      let uid = sessionStorage.getItem("uid");
+    fetchMyPictures(uid, callback) {
       dispatch(fetchMyPictures(uid, callback));
     },
-    fetchMyLikes(callback) {
-      let uid = sessionStorage.getItem("uid");
+    fetchMyLikes(uid, callback) {
       dispatch(fetchMyLikes(uid, callback));
     },
-    fetchAllTweets(callback) {
-      let uid = sessionStorage.getItem("uid");
+    fetchAllTweets(uid, callback) {
       dispatch(fetchAllTweets(uid, callback));
     },
   };

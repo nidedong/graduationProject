@@ -1,11 +1,14 @@
 import userData from "./datas/user";
 import mainData from "./datas/main";
+import messageData from "./datas/message";
 import * as profileType from "./actionsTypes/profile";
 import * as mainType from "./actionsTypes/main";
+import * as messageType from "./actionsTypes/message";
 
 const defaultState = {
   ...userData,
   ...mainData,
+  ...messageData,
   loadingInfo: [],
 };
 
@@ -27,6 +30,11 @@ export default (state = defaultState, action) => {
       return newState;
     case profileType.LOADING_PAGE_DATA:
       newState.loadingInfo = action.loadingInfo;
+      return newState;
+    case messageType.FETCH_MESSAGE_LIST:
+      console.log(action, "action!!!!!!!!!!!!!!!!");
+      newState.messageList = action.info.messageList;
+      newState.ws = action.info.ws;
       return newState;
     default:
       break;

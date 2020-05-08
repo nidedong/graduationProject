@@ -3,8 +3,12 @@ import "./profile.css";
 import Header from "@/components/header/index";
 import { Icon, Button, Modal, Form, Input, Upload, message } from "antd";
 import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
 import * as actionCreator from "@/store/actionCreators/profile";
 import LoadingPage from "@/components/loadingPage/index";
+import * as api from "@/api/profile";
+import * as messageApi from "@/api/message";
+import Recommend from "@/components/recommend/index";
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -17,11 +21,16 @@ class Profile extends Component {
         { title: "我的照片", key: "fetchMyPictures", name: "myPictures" },
         { title: "我的喜欢", key: "fetchMyLikes", name: "myLikes" },
       ],
+      uid: this.props.match.params.uid,
+      isFriend: true,
     };
   }
   // 数据初始化
   componentDidMount() {
-    // this.props.fetchInitData();
+    this.setState({
+      isSelf: this.state.uid === sessionStorage.getItem("uid") ? true : false,
+    });
+    this.props.fetchInitData(this.state.uid);
   }
 
   toogleModalStatus() {
@@ -40,13 +49,13 @@ class Profile extends Component {
   handleOk = (e) => {
     let { getFieldsValue } = this.props.form;
     let fields = getFieldsValue(["nickname", "birthday", "phone"]);
-    let { headerImg, backgroundImg } = this.state;
+    let { headerImg, backgroundImg, uid } = this.state;
     let postParams = { headerImg, backgroundImg, ...fields };
     !headerImg && delete postParams.headerImg;
     !backgroundImg && delete postParams.backgroundImg;
     postParams = Object.assign({}, this.props.profileInfo, postParams);
     // 上传修改的信息
-    this.props.putData(postParams);
+    this.props.putData(uid, postParams);
     this.setState({
       visible: false,
     });
@@ -108,10 +117,32 @@ class Profile extends Component {
     }
   };
 
+  async addFriend() {
+    console.log(api);
+    let uid = sessionStorage.getItem("uid");
+    let otherUid = this.state.uid;
+    await api.addFriend({
+      uid,
+      otherUid,
+    });
+    message.success("添加成功!");
+  }
+
+  async componentWillMount() {
+    let res = await messageApi.getFriendsList({
+      uid: sessionStorage.getItem("uid"),
+    });
+    let index = res.friends.findIndex((item) => item.uid === this.state.uid);
+    this.setState({
+      isFriend:
+        index !== -1 && this.state.uid !== sessionStorage.getItem("uid"),
+    });
+  }
+
   render() {
     let profileInfo = this.props.profileInfo;
     let { getFieldDecorator } = this.props.form;
-    let { avatarUrl, bgiUrl, navTitle } = this.state;
+    let { avatarUrl, bgiUrl, navTitle, uid, isSelf, isFriend } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 6 },
@@ -125,7 +156,7 @@ class Profile extends Component {
 
     return (
       <div className="profileWrapper">
-        <Header content="我的"></Header>
+        <Header content={isSelf ? "我的" : "他的"}></Header>
         <div className="backgroundImg">
           <img
             src={profileInfo.backgroundImg}
@@ -147,9 +178,21 @@ class Profile extends Component {
         </div>
 
         {/* 设置 */}
-        <div className="settingProfile">
+
+        <div
+          className="settingProfile"
+          style={{ visibility: isSelf ? "visible" : "hidden" }}
+        >
           <Button onClick={() => this.toogleModalStatus()}>设置我的</Button>
         </div>
+        {!isFriend && (
+          <div
+            className="addFriend"
+            style={{ visibility: isSelf ? "hidden" : "visible" }}
+          >
+            <Button onClick={() => this.addFriend()}>加好友</Button>
+          </div>
+        )}
 
         <div className="showInfo">
           <div className="nickName special">{profileInfo.nickname}</div>
@@ -174,7 +217,11 @@ class Profile extends Component {
             </div>
           </div>
         </div>
-        <LoadingPage navTitle={navTitle} cpnKey="profile"></LoadingPage>
+        <LoadingPage
+          navTitle={navTitle}
+          cpnKey="profile"
+          uid={uid}
+        ></LoadingPage>
         {/* 模态框 */}
         <Modal
           visible={this.state.visible}
@@ -250,6 +297,7 @@ class Profile extends Component {
             </Form.Item>
           </Form>
         </Modal>
+        <Recommend></Recommend>
       </div>
     );
   }
@@ -263,13 +311,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchInitData() {
-      let uid = sessionStorage.getItem("uid");
+    fetchInitData: (uid) => {
       dispatch(actionCreator.fetchInitData(uid));
     },
 
-    putData(params) {
-      let uid = sessionStorage.getItem("uid");
+    putData: (uid, params) => {
       dispatch(actionCreator.putData(uid, params));
     },
   };
@@ -278,4 +324,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Form.create()(Profile));
+)(Form.create()(withRouter(Profile)));

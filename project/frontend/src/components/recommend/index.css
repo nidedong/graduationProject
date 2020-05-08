@@ -1,0 +1,45 @@
+.recommend {
+  width: 440px;
+  border-radius: 15px;
+  border: 1px solid #4e5f6b;
+  position: absolute;
+  right: -470px;
+  top: 15px;
+  padding: 20px 0;
+  z-index: 9999;
+}
+
+.recommentWrapper {
+
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #4e5f6b;
+  margin-bottom: 20px;
+
+}
+
+.recommentWrapper:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.recommend .img {
+
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.recommend .dsc {
+  min-height: 64px;
+  width: 100%;
+  line-height: 26px;
+}
+
+.mg-r-10 {
+  margin-right: 10px;
+}

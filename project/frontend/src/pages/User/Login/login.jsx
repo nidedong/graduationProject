@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Icon, Form, Input, Checkbox, Button } from "antd";
 import { loginApi } from "../../../api/user";
 import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import * as actionCreators from "@/store/actionCreators/message";
 import "./login.css";
 class Login extends Component {
   constructor(props) {
@@ -122,6 +124,7 @@ class Login extends Component {
         sessionStorage.setItem("token", res.token);
         sessionStorage.setItem("uid", res.data.uid);
         this.props.history.push("/main");
+        this.props.connectWebsocket();
       }, 1000);
     } else {
       this.setState({
@@ -132,6 +135,19 @@ class Login extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    connectWebsocket() {
+      let uid = sessionStorage.getItem("uid");
+      let wsServer = new WebSocket("ws://localhost:9001");
+      wsServer.onopen = (e) => {
+        console.log("消息服务器连接成功！！！！！！！！！！");
+      };
+      dispatch(actionCreators.fetchMessageList(uid, wsServer));
+    },
+  };
+};
+
 const WrappedLogin = Form.create({})(Login);
 
-export default withRouter(WrappedLogin);
+export default connect(null, mapDispatchToProps)(withRouter(WrappedLogin));

@@ -8,3 +8,4 @@ export const fetchMyLikesApi = (params) => ajax("/users/getMyLikes", params);
 export const fetchMyPicturesApi = (params) =>
   ajax("/users/getMyPictures", params);
 export const putDataApi = (params) => ajax("/users/setProfile", params, "post");
+export const addFriend = (params) => ajax("/explore/addFriend", params, "post");

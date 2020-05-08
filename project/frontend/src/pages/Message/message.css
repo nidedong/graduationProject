@@ -1,0 +1,61 @@
+.message {
+  height: 90vh;
+  /* overflow: auto; */
+  position: relative;
+}
+
+.friendList {
+  width: 300px;
+  border-right: 1px solid #4e5f6b;
+  border-top: 1px solid #4e5f6b;
+  border-bottom: 1px solid #4e5f6b;
+  position: absolute;
+  right: -300px;
+  height: 100%;
+  top: 70px;
+  box-sizing: content-box;
+  padding-left: 0;
+}
+
+.content .me,
+.content .other {
+  padding: 20px;
+  display: flex;
+  color: #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.content .me {
+  flex-direction: row-reverse;
+}
+
+.content .me img,
+.content .other img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid red;
+  margin-right: 20px;
+}
+
+.content .me img {
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+.friendBox {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 16px;
+  border-bottom: 1px solid #4e5f6b;
+}
+
+.friendBox img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}

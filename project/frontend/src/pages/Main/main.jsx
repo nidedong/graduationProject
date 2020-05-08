@@ -7,6 +7,8 @@ import * as actionCreatorMain from "@/store/actionCreators/main";
 import { Form, Avatar, Button, Upload, Icon, message, Modal } from "antd";
 import "./main.css";
 
+import Recommend from "@/components/recommend/index";
+
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -20,9 +22,7 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    if (Object.keys(this.props.profileInfo).length === 0) {
-      this.props.fetchInitData();
-    }
+    this.props.fetchInitData();
   }
 
   sendTweet = () => {
@@ -101,6 +101,7 @@ class Main extends Component {
     } = this.state;
     return (
       <div className="mainWrapper">
+        <Recommend></Recommend>
         <Header content="首页"></Header>
 
         <div className="tweet">

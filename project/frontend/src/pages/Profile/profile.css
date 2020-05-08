@@ -1,4 +1,6 @@
-.profileWrapper {}
+.profileWrapper {
+  position: relative;
+}
 
 .profileWrapper .backgroundImg {
   width: 100%;
@@ -52,7 +54,8 @@
   line-height: 30px;
 }
 
-.settingProfile {
+.settingProfile,
+.addFriend {
   height: 90px;
   display: flex;
   justify-content: flex-end;
@@ -60,7 +63,8 @@
   padding-right: 20px;
 }
 
-.settingProfile button {
+.settingProfile button,
+.addFriend button {
   border: 1px solid #0b76b9;
   background-color: rgba(0, 0, 0, .2);
   padding: 8px;
