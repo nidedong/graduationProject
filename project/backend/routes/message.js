@@ -13,10 +13,11 @@ router.post("/getFriends", async function (req, res, next) {
   res.send({ message: "0k", friends: friendRes });
 });
 router.get("/MessageList", async function (req, res, next) {
-  let { uid } = req.body;
-  let queryRes = await query(`select * from message where fromUid='${uid}'`);
-  console.log(queryRes);
-  res.send({ message: "0k" });
+  let { uid } = req.query;
+  let queryRes = await query(
+    `select * from message where fromUid='${uid}' or toUid='${uid}'`
+  );
+  res.send({ message: "0k", messageList: queryRes });
 });
 
 module.exports = router;

@@ -32,7 +32,6 @@ export default (state = defaultState, action) => {
       newState.loadingInfo = action.loadingInfo;
       return newState;
     case messageType.FETCH_MESSAGE_LIST:
-      console.log(action, "action!!!!!!!!!!!!!!!!");
       newState.messageList = action.info.messageList;
       newState.ws = action.info.ws;
       return newState;

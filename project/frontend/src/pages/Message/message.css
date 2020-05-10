@@ -2,6 +2,8 @@
   height: 90vh;
   /* overflow: auto; */
   position: relative;
+  padding-bottom: 200px;
+  box-sizing: border-box;
 }
 
 .friendList {
@@ -15,8 +17,13 @@
   top: 70px;
   box-sizing: content-box;
   padding-left: 0;
+  z-index: 9999;
 }
 
+.content {
+  max-height: 680px;
+  overflow: auto;
+}
 .content .me,
 .content .other {
   padding: 20px;
@@ -45,6 +52,7 @@
 }
 
 .friendBox {
+  position: relative;
   padding: 10px;
   display: flex;
   align-items: center;
@@ -58,4 +66,31 @@
   height: 50px;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+.friendBox.active {
+  opacity: 0.4;
+}
+
+.editor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+}
+
+.notRead {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  color: #fff;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
 }

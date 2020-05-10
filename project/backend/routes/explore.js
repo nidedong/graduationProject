@@ -48,6 +48,18 @@ router.post("/addFriend", async function (req, res, next) {
   await query(
     `update profile set friends='${JSON.stringify(friends)}' where uid='${uid}'`
   );
+  let profileRes2 = await query(
+    `select friends from profile where uid='${otherUid}'`
+  );
+  let friends2 = profileRes2[0].friends
+    ? JSON.parse(profileRes2[0].friends)
+    : [];
+  friends2.push(uid);
+  await query(
+    `update profile set friends='${JSON.stringify(
+      friends2
+    )}' where uid='${otherUid}'`
+  );
   res.send({ message: "0k" });
 });
 

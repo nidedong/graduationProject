@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Icon, Button } from "antd";
 import "./index.css";
+import { connect } from "react-redux";
 
 class Aside extends Component {
   constructor(props) {
@@ -15,8 +16,12 @@ class Aside extends Component {
   // 退出功能
   logout = () => {
     this.setState({ isLoading: true }, () => {
+      // this.props.ws.send(`close?${uid}`);
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("uid");
+
+      this.props.ws.close();
+      sessionStorage.removeItem("state");
       setTimeout(() => {
         this.props.history.push("/");
       }, 700);
@@ -132,4 +137,10 @@ class Aside extends Component {
   }
 }
 
-export default withRouter(Aside);
+const mapStateToProps = (state) => {
+  return {
+    ws: state.ws,
+  };
+};
+
+export default connect(mapStateToProps, null)(withRouter(Aside));

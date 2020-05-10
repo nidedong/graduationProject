@@ -163,7 +163,6 @@ router.get("/getMyLikes", async (req, res) => {
   let { uid } = req.query;
   let queryRes = await query(`select mylike from profile where uid='${uid}'`);
   let mylike = queryRes[0].mylike ? JSON.parse(queryRes[0].mylike) : [];
-  console.log(mylike);
   let mainRes = await query(
     `select * from main where find_in_set(id, '${mylike.toString()}')`
   );

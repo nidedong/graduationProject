@@ -22,12 +22,35 @@ connection.connect(function (err) {
   console.log("数据库连接成功...");
 });
 
+const online_users_obj = {};
 // 启动socket服务器
 let wss = new ws.Server({ port: 9001 });
 wss.on("connection", function (ws) {
   console.log("服务器socket连接成功...");
-  ws.on("message", function (message) {
-    console.log(message, "---------");
+  ws.on("message", async function (message) {
+    if (message.indexOf("connect?") !== -1) {
+      online_users_obj[message.split("?")[1]] = ws;
+      console.log(Object.keys(online_users_obj));
+      return;
+    } else if (message.indexOf("close?") !== -1) {
+      delete online_users_obj[message.split("?")[1]];
+      console.log(Object.keys(online_users_obj));
+      return;
+    }
+    message = JSON.parse(message);
+    if (online_users_obj[message.toUid]) {
+      online_users_obj[message.toUid].send(
+        JSON.stringify({
+          message,
+        })
+      );
+    } else {
+      console.log("该用户不在线");
+    }
+
+    await query(
+      `insert into message (fromUid, toUid, type, message) values ('${message.fromUid}', '${message.toUid}', '${message.type}', '${message.message}')`
+    );
   });
 });
 
